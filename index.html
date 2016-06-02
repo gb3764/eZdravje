@@ -58,18 +58,37 @@
       <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <div class="col-lg-8 col-md-8 col-sm-8">IZBERI ŽELJENO FANKCIJO</div>
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-8">why is this here</div>
+            </div>
           </div>
           <div class="panel-body">
             <div class="row">
-              <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHRodBolnika()">GUMB ZA FUNKCIONALNOST HERE</button><span id="preberiSporocilo"></span>
-            </div>
-            <div class="row">
-              <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHRodBolnika()">GUMB ZA FUNKCIONALNOST HERE</button><span id="preberiSporocilo"></span>
+              <button type="button" class="btn btn-primary btn-xs" onclick="preberiMeritveVitalnihZnakov()" style="margin-left:10px;">Izpiši vitalne znake!</button><span id="preberiSporocilo"></span>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-lg-8 col-md-8 col-sm-8">Izpis vitalnih znakov izbranega pacienta</div><span id="imePriimek"></span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<span class="label label-default">Telesna višina</span><div class="input-group"><input id="dodajVitalnoTelesnaVisina" type="text" class="form-control input-mini"><span class="input-group-addon">cm</span></div>
+						<span class="label label-default">Telesna teža</span><div class="input-group"><input id="dodajVitalnoTelesnaTeza" type="text" class="form-control input-mini"><span class="input-group-addon">kg</span></div>
+						<span class="label label-default">Telesna temperatura</span><div class="input-group"><input id="dodajVitalnoTelesnaTemperatura" type="text" class="form-control input-mini"><span class="input-group-addon">°C</span></div>
+						<span class="label label-default">Sistolični krvni tlak</span><div class="input-group"><input id="dodajVitalnoKrvniTlakSistolicni" type="text" class="form-control input-mini"><span class="input-group-addon">mm Hg</span></div>
+						<span class="label label-default">Diastolični krvni tlak</span><div class="input-group"><input id="dodajVitalnoKrvniTlakDiastolicni" type="text" class="form-control input-mini"><span class="input-group-addon">mm Hg</span></div>
+						<span class="label label-default">Nasičenost krvi s kisikom</span><div class="input-group"><input id="dodajVitalnoNasicenostKrviSKisikom" type="text" class="form-control input-mini"><span class="input-group-addon">%</span></div>
+				  	<span id="podrobnosti"></span>
+				  	</div>
+				</div>
+			</div>
     </div>
   </div>
   <!-- KONEC: Vsebina aplikacije -->

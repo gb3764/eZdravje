@@ -6,6 +6,7 @@ var username = "ois.seminar";
 var password = "ois4fri";
 
 var ehrIdArray = ["", "", ""];
+var myBarChart;
 
 
 /**
@@ -401,6 +402,102 @@ function podrobnostiPorocila() {
                   JSON.parse(err.responseText).userMessage + "'!");
 					    }
 					});
+	}
+}
+
+function fattyGraph() {
+	
+	if (myBarChart) {
+		
+		myBarChart.destroy();
+	}
+	
+	sessionId = getSessionId();
+
+	var ehrId = $("#preberiEHRid").val();
+	var weight;
+	var height;
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#preberiSporocilo2").html("<span class='obvestilo " +
+      "label label-warning fade-in'>Prosim vnesite EHR ID!");
+	} else {
+		$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "weight",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						        weight = res[0].weight;
+					    	} else {
+					    		$("#preberiSporocilo2").html(
+                    "<span class='obvestilo label label-warning fade-in'>" +
+                    "Ni podatkov!</span>");
+					    	}
+					    },
+					    error: function() {
+					    	$("#preberiSporocilo2").html(
+                  "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                  JSON.parse(err.responseText).userMessage + "'!");
+					    }
+					});
+		$.ajax({
+  					    url: baseUrl + "/view/" + ehrId + "/" + "height",
+					    type: 'GET',
+					    headers: {"Ehr-Session": sessionId},
+					    success: function (res) {
+					    	if (res.length > 0) {
+						        height = res[0].height;
+					    	} else {
+					    		$("#preberiSporocilo2").html(
+                    "<span class='obvestilo label label-warning fade-in'>" +
+                    "Ni podatkov!</span>");
+					    	}
+					    },
+					    error: function() {
+					    	$("#preberiSporocilo2").html(
+                  "<span class='obvestilo label label-danger fade-in'>Napaka '" +
+                  JSON.parse(err.responseText).userMessage + "'!");
+					    }
+					});
+		setTimeout(function() {
+var healthyWeight = 50;
+for (var i = 60; i < height*0.3937; i++) {
+	
+	healthyWeight += 1.8;
+}
+healthyWeight = Math.round(healthyWeight * 100)/100;
+var ctx = document.getElementById("myChart");
+var data = {
+    labels: ["Pacientova telesna teža", "Zdrava telesna teža"],
+    datasets: [
+        {
+        	label: "Teža v kilogramih",
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [weight, healthyWeight],
+        }
+    ]
+};
+myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+        scales: {
+                xAxes: [{
+                        stacked: true
+                }],
+                yAxes: [{
+                        stacked: true
+                }]
+        }
+        
+    }
+});
+	}, 500);
 	}
 }
 

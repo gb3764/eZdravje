@@ -6,11 +6,19 @@
   <link href="knjiznice/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {padding-top: 70px;}
+    #map {
+        width: 100%;
+        height: 500px;
+      }
   </style>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
   <script src="node_modules/chart.js/dist/Chart.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIcZHi2xX8p0ICe20cE6v4nr2RxEJ3whQ&callback=initMap"
+    async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIcZHi2xX8p0ICe20cE6v4nr2RxEJ3whQ&libraries=places&callback=initMap" async defer></script>
+
 </head>
 <body>
 
@@ -37,7 +45,7 @@
   </nav>
   <!-- KONEC: Menujska vrstica na vrhu spletne strani -->
   
-  
+  <!-- Google Maps API key: " AIzaSyAIcZHi2xX8p0ICe20cE6v4nr2RxEJ3whQ " -->
   
   <!-- ZAČETEK: Vsebina aplikacije -->
   <div class="container">
@@ -97,6 +105,86 @@
 				<div class="panel panel-default">
 				  <canvas id="myChart" width="100" height="100"></canvas>
 				</div>
+			</div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="panel panel-default">
+      <div id="map"></div>
+      <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+      
+      var map;
+      var infowindow;
+      
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 15
+        });
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+            ///////////////
+            infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: pos,
+          radius: 500,
+          type: ['gym']
+        }, callback);
+            ///////////////
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+      
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+    </script>
+    </div>
 			</div>
     </div>
   </div>

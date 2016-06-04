@@ -467,6 +467,23 @@ for (var i = 60; i < height*0.3937; i++) {
 	healthyWeight += 1.8;
 }
 healthyWeight = Math.round(healthyWeight * 100)/100;
+
+if (weight - healthyWeight >= 10) {
+	
+	fattyReport();
+}
+
+else {
+	
+	$("#fattyReport").html("Pacient ima primerno telesno težo.");
+	$("#fattyMap").html("");
+	
+	for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+    }
+	markers = [];
+}
+
 var ctx = document.getElementById("myChart");
 var data = {
     labels: ["Pacientova telesna teža", "Zdrava telesna teža"],
@@ -501,6 +518,83 @@ myBarChart = new Chart(ctx, {
 	}
 }
 
+function fattyReport() {
+	
+	$("#fattyReport").html("<span><b>Pacient ima prekomerno telesno težo</b>, na zemljevidu</span>");
+	$("#fattyMap").html("<span>so prikazane ustanove za izgubo odvečne telesne teže.</span>");
+	
+	infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: pos,
+          radius: 5000,
+          type: ['gym']
+        }, callback);
+}
+
+	  var map;
+      var infowindow;
+      var pos;
+      var markers = [];
+      
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 12
+        });
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            map.setCenter(pos);
+            ///////////////
+            
+            ///////////////
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+      
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+        markers.push(marker);
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
 
 $(document).ready(function() {
 

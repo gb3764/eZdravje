@@ -478,7 +478,7 @@ function fattyReport() {
         }, callback);
 }
       
-      function initMap() {
+        function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: pos,
           zoom: 12
@@ -531,7 +531,7 @@ function fattyReport() {
           infowindow.open(map, this);
         });
       }
-      
+
 $(document).ready(function() {
   
    //Napolni testni EHR ID pri prebiranju EHR zapisa obstoječega bolnika,

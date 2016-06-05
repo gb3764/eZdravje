@@ -9,7 +9,7 @@ var ehrIdArray = ["", "", ""];
 var myBarChart;
 var map;
 var infowindow;
-var pos;
+var pos = {lat: 46.05, lng: 14.5}; //default position is Ljubljana
 var markers = [];
 
 
@@ -480,11 +480,11 @@ function fattyReport() {
       
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
+          center: pos,
           zoom: 12
         });
-        var infoWindow = new google.maps.InfoWindow({map: map});
-
+        //var infoWindow = new google.maps.InfoWindow({map: map});
+		
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
